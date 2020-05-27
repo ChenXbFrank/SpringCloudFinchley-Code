@@ -1,0 +1,30 @@
+server:
+  port: 8781
+
+spring:
+  application:
+    name: eureka-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lowerCaseServiceId: true
+      routes:
+      - id: eureka-service-a
+        uri: lb://eureka-service-a
+        predicates:
+          - Path= /api-a/**
+        filters:
+          - StripPrefix=1
+      - id: eureka-service-b
+        uri: lb://eureka-service-b
+        predicates:
+          - Path= /api-b/**
+        filters:
+          - StripPrefix=1
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
